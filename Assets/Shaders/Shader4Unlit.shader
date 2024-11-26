@@ -25,7 +25,7 @@
             {
                 float delta  = i.uv.x;
                 fixed3 color   = lerp(_ColorA, _ColorB, delta);
-                return fixed4(color, 1.0);
+                return fixed4(color, 1.0);     
             }
             ENDCG
         }
