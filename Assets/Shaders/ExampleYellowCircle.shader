@@ -15,29 +15,30 @@ Shader "Unlit/ExampleYellowCircle"
             
             #include "UnityCG.cginc"
 
-            struct v2f    // Структура для передачи данных между вершинным и пиксельным шейдером
+            struct v2f    // The structure for passing data between the vertex shader and the pixel shader
             {
-                 float4 vertex : SV_POSITION;   // Позиция вершины в пространстве экрана
-                 float2 position : TEXCOORD0;   // Нормализованные координаты экрана
+                 float4 vertex : SV_POSITION;   // The position of the vertex in screen space
+
+                 float2 position : TEXCOORD0;   // Normalized screen coordinates
             };
 
-            v2f vert (appdata_base v) // Вершинный шейдер
+            v2f vert (appdata_base v) // Vertex Shader
             {
                 v2f o;
-                o.vertex = UnityObjectToClipPos(v.vertex);    // Преобразуем в пространство экрана
-                o.position = o.vertex.xy / o.vertex.w;       // Нормализуем позиции (x, y) в диапазоне [-1, 1]
+                o.vertex = UnityObjectToClipPos(v.vertex);    // Transform to screen space
+                o.position = o.vertex.xy / o.vertex.w;       // Normalize positions (x, y) to the range [-1, 1]
                 return o;
             }
             
-            float _CircleRadius; // Глобальная переменная для радиуса окружности
+            float _CircleRadius; // A global variable for the circle's radius
             
-            fixed4 frag (v2f i) : SV_Target // Пиксельный шейдер
+            fixed4 frag (v2f i) : SV_Target // Pixel Shader
             {
-                float dist = length(i.position.xy);  // расстояние от центра экрана (0, 0)
+                float dist = length(i.position.xy);  // Distance from the center of the screen (0, 0)
                 
-                float insideCircle = step(dist, _CircleRadius);  //  step для определения границы окружности
+                float insideCircle = step(dist, _CircleRadius);  //  step for determining the circle's boundary
                 
-                return fixed4(insideCircle, insideCircle, 0.0, 1.0);  // Возвращаем желтый цвет внутри окружности и черный снаружи
+                return fixed4(insideCircle, insideCircle, 0.0, 1.0);  // return a yellow color inside the circle and black outside
             }
             ENDCG
         }
